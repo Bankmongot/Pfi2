@@ -12,10 +12,13 @@ import se.mah.k3lara.skaneAPI.xmlparser.Parser;
 public class TestClass {
 
 	public static void main(String[] args) {
-		String searchURL = Constants.getURL("80000","81216",20); //Malmö C = 80000,  Lund C, 81216 Malmö Gatorg 80100, Hässleholm C 93070
+		// Nedanstående kod hämtar två stationer (Malmö = 80000, Lund C = 81216), samt visar 20 rese-resultat.
+		String searchURL = Constants.getURL("80000","81216",20); //Malmö C = 80000,  Lund C, 81216
 		System.out.println(searchURL);
 		System.out.println("// Results when searching:");
 		
+		
+		// Hämtar resor från Skånetrafikens API, och matchar det med stationerna ovan.
 		Journeys journeys = Parser.getJourneys(searchURL);
 		for (Journey journey : journeys.getJourneys()) {
 			System.out.print(journey.getStartStation()+" - ");
@@ -25,7 +28,9 @@ public class TestClass {
 		} 
 		
 	   System.out.println("// Stations when searching for stations containing \"Malm\"");
+	   // Skapar en arrayList av stationer som läggs in beroende på sökresultatet nedan.
 		ArrayList<Station> searchStations = new ArrayList<Station>(); 
+		// Hämtar alla stationer som börjar på "Malm" och lägger de i Arraylisten.
 		searchStations.addAll(Parser.getStationsFromURL("Malm"));
 		for (Station s: searchStations){
 			System.out.println(s.getStationName() +" number:" +s.getStationNbr());

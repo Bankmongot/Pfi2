@@ -1,0 +1,34 @@
+1. Mellan vilka stationer sker sökningen?
+
+Svar:
+Mellan Malmö C (från) och Lund C (till).
+
+
+2. Hur ser en QueryString ut om man bara vill ha 5 resultatet för sökningen (Titta i xsd filen för sök-ningen)?
+
+Svar:
+?cmdaction=next&selPointFr=0|80000|0&selPointTo=0|81216|0&NoOf=5
+NoOf är en valfri variabel som bestämmer antalet resor som visas.
+
+
+
+3. Vilka delar av resan beskriver dessa taggar: <Journeys></Journeys>, <Journey></Jouney>,<Route-Links></RouteLinks>, >,<RouteLink></RouteLink>? Placera dem även korrekt hierarkiskt.
+
+Svar:
+<Journeys> är en insamlare av alla de resor som går till den destination du valt.
+<Journey> är EN av dessa resor.
+<Route-Links> är en insamlare av alla de "steg" som en resa går igenom.
+<RouteLink> är ETT av dessa "steg".
+
+
+
+4. Vilken XML-tagg innehåller antal byte för en resa och under vilken huvudtagg är den taggen place-rad?
+
+Svar:
+<NoOfChanges>0</NoOfChanges> och den är placerad i taggen:  <Journey>
+
+
+5. Ge exempel på en XML tagg som inte finns implementerad i det API du laddade ner.
+
+Svar:
+<ArrDeviationAffect> - Det vill säga om den implementerade taggen arrTimeDeviation ( om det är några förändringar i tiden) påverkar tågets avgångstid eller inte.
