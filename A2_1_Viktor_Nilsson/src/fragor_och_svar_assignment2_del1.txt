@@ -1,0 +1,26 @@
+
+Ange vad som är:
+a) konstruktor
+
+Svar:
+public House() {
+}
+
+b) instansvariabler
+
+Svar:
+private int yearBuilt;
+private int size;
+private final int minSize = 10;
+
+
+c) instansmetoder
+
+Svar:
+Båda getters (dvs getYearBuilt() och getSize() räknas som instansmetoder.
+
+d) vad innebär det att minSize är deklarerad final?
+Det innebär att man inte kan ändra värdet av denna. Det är det "slutgiltiga" värdet. Kan vara bra för att sätta minimumg/maximum gränser av ett specifikt värde.
+
+e) vad innebär det att vissa koddelar är deklarerade private och andra public?
+Om något är deklarerat "private" så innebär det att detta endast kan visas (kallas på, användas etc) inom den specifika klassen. Public tillåter det däremot, därav att det är public.
