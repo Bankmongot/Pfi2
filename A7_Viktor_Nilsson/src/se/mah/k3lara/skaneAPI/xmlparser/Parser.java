@@ -65,6 +65,7 @@ public class Parser {
         String line;
         Calendar depTime;
         Calendar arrTime;
+        
 		String xml = parser.getXmlFromUrl(searchURL); // getting XML
 		if (xml!=null){
 			Document doc = parser.getDomElement(xml); // getting DOM element
@@ -149,6 +150,9 @@ public class Parser {
 		String lineNo;
 		Calendar depTime;
 		String depTimeDeviation;
+		String towards;
+		String stopPoint;
+
 		Lines lines = new Lines(station);
 		String xml = parser.getXmlFromUrl(searchURL); // getting XML
 		if (xml!=null){
@@ -163,18 +167,23 @@ public class Parser {
 				//Get the value for the tag "JourneyDateTime" //That is departuretime and date as String
 				String journeyDateTime = parser.getValue(e, "JourneyDateTime"); 
 				if(debug){System.out.println("JourneyDateTime: "+ journeyDateTime);}
-				//Convert the String to a Calendar object with a helper method written for this in the Helpers class
+				
+				// Adds function for destination through parser, called "towards."
+				towards = parser.getValue(e, "Towards");
+				
+				
+				
 				depTime = Helpers.parseCalendarString(journeyDateTime);
-				//Get the value for that tag "JourneyDateTime"
+				
+				// Adds function for Time Deviation through parser.
 				depTimeDeviation = parser.getValue(e, "DepTimeDeviation"); 
 				if(debug){System.out.println("DepTimeDeviation: "+ depTimeDeviation);}
-				//Continue with all other elements in the Line node.......
-				//....
 				
-				//Then we got one Line lets create a line object and add it to Lines
+				//Adds all selected objects to Line.
 				Line l = new Line();
 				l.setDepTime(depTime);
 				l.setLine(lineNo);
+				l.setTowards(towards);
 				l.setDepTimeDeviation(depTimeDeviation);
 				lines.addLine(l);
 				//Ok next Line element
