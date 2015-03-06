@@ -15,12 +15,15 @@ import java.awt.Color;
 import java.text.SimpleDateFormat;
 import java.util.EventListener;
 import java.awt.Image;
+
 import javax.swing.Timer;
+
 
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Dimension;
+
 import javax.swing.JButton;
 import javax.swing.JTextField;
 
@@ -29,19 +32,31 @@ import javax.swing.JTextField;
 public class DigitalClockGUI extends JFrame implements ActionListener {
 	
 	
-	
-	private JPanel contentPane;
-	private ClockLogic clockLogic;
 	Timer timer;
+	private JPanel contentPane;
 	
-	// Makes you able to call upon a specific date format. Also used with import.
+	
+	
 	SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+	// Makes you able to call upon a specific date format. Also used with import.
+	//SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
 	
-	private JLabel labelTime = new JLabel("");
+	JLabel labelTime = new JLabel("");
 	
-	private JTextField textField;
-	private JTextField textField_1;
+	JTextField textField;
+	JTextField textField_1;
+	JLabel errorMsg;
+	JLabel statusAlarm;
+	JLabel alarmTime;
+	JLabel okMsg;
+	JLabel clockIcon;
+	JButton btnNewButton_1;
 	
+	
+	private DigitalClockGUI g;
+	ClockInterface ci;
+	
+	Thread t1 = new ClockThread(ci,this);
 	
 	/**
 	 * Launch the application.
@@ -64,6 +79,8 @@ public class DigitalClockGUI extends JFrame implements ActionListener {
 	 * Create the frame.
 	 */
 	public DigitalClockGUI() {
+		setTitle("Alarm Clock");
+		setIcon();
 		setMinimumSize(new Dimension(650, 350));
 		setMaximumSize(new Dimension(650, 350));
 		setModalExclusionType(ModalExclusionType.TOOLKIT_EXCLUDE);
@@ -73,8 +90,6 @@ public class DigitalClockGUI extends JFrame implements ActionListener {
 		timer.setRepeats(true);
 		timer.start();
 		
-		pack();
-		setVisible(true);
 		
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -83,6 +98,16 @@ public class DigitalClockGUI extends JFrame implements ActionListener {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
+		
+		textField = new JTextField();
+		textField.setBounds(459, 78, 78, 20);
+		contentPane.add(textField);
+		textField.setColumns(10);
+		
+		textField_1 = new JTextField();
+		textField_1.setBounds(459, 129, 78, 20);
+		contentPane.add(textField_1);
+		textField_1.setColumns(10);
 		
 		JLabel lblSetAlarmMinutes = new JLabel("Set alarm minutes:");
 		lblSetAlarmMinutes.setForeground(Color.WHITE);
@@ -104,15 +129,7 @@ public class DigitalClockGUI extends JFrame implements ActionListener {
 		labelTime.setText(sdf.format(new Date(System.currentTimeMillis())));
 		contentPane.add(labelTime);
 		
-		textField = new JTextField();
-		textField.setBounds(459, 78, 78, 20);
-		contentPane.add(textField);
-		textField.setColumns(10);
 		
-		textField_1 = new JTextField();
-		textField_1.setBounds(459, 129, 78, 20);
-		contentPane.add(textField_1);
-		textField_1.setColumns(10);
 		
 		// All "final" parts are used to get their values changed in some way.
 		// Error Message, Ok message, alarm time, status of alarm and the clock icon.
@@ -149,46 +166,8 @@ public class DigitalClockGUI extends JFrame implements ActionListener {
 		JButton btnNewButton_1 = new JButton("SET ALARM");
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-
-				
-				int hourCheck = Integer.parseInt(textField.getText());
-				int minuteCheck = Integer.parseInt(textField_1.getText());
-				
-				// Checks if entered hour and minute values entered in textfields are
-				// extends over 23 hrs or 59 minutes.
-				if (hourCheck < 0 || hourCheck > 23 || minuteCheck < 0
-						|| minuteCheck > 59) {
-					errorMsg.setText("Please enter realistic values.");
-				// Else if the values are below 10, it adds a zero to the single value.
-				// prints it like for example "03" instead of "3".
-				} else {
-					String addZero = "";
-					String addZero1 = "";
-
-					if (hourCheck < 10) {
-						addZero = "0";
-					}
-					if (minuteCheck < 10) {
-						addZero1 = "0";
-					}
-
-					// Applies zeros to alarm label.
-					alarmTime.setText(addZero + hourCheck + ":" + addZero1
-							+ minuteCheck);
-
-				
-
-					addZero = "";
-					addZero1 = "";
-					
-					// On pressing this button, this also happens:
-					errorMsg.setText("");
-					okMsg.setText("*Alarm has been set.");
-					statusAlarm.setText("New alarm:");
-					clockIcon.setIcon(new ImageIcon(DigitalClockGUI.class.getResource("/images/clock.PNG")));
-
-				}
-
+				Thread t1 = new ClockThread(ci, g);
+				t1.start();
 			}
 		});
 		btnNewButton_1.setForeground(Color.WHITE);
@@ -229,6 +208,11 @@ public class DigitalClockGUI extends JFrame implements ActionListener {
 		
 	}
 
+	private void setIcon() {
+	setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("icon_clock.jpg")));
+		
+	}
+
 	public void setTimeOnLabel(String time) {
 		labelTime.setText(time);
 		
@@ -249,3 +233,4 @@ public class DigitalClockGUI extends JFrame implements ActionListener {
 		
 	}
 }
+
